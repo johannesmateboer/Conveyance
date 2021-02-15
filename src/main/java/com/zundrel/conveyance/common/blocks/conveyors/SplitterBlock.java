@@ -7,17 +7,19 @@ import com.zundrel.conveyance.common.blocks.entities.SplitterBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalFacingBlock;
+import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-public class SplitterBlock extends HorizontalFacingBlock implements BlockEntityProvider, ConveyableBlock {
+@SuppressWarnings("deprecation")
+public class SplitterBlock extends BlockWithEntity implements BlockEntityProvider, ConveyableBlock {
     public SplitterBlock(Settings settings) {
         super(settings);
     }
@@ -29,12 +31,12 @@ public class SplitterBlock extends HorizontalFacingBlock implements BlockEntityP
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> stateManagerBuilder) {
-        stateManagerBuilder.add(FACING);
+        stateManagerBuilder.add(Properties.FACING);
     }
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext itemPlacementContext) {
-        return this.getDefaultState().with(FACING, itemPlacementContext.getPlayer().isSneaking() ? itemPlacementContext.getPlayerFacing().getOpposite() : itemPlacementContext.getPlayerFacing());
+        return this.getDefaultState().with(Properties.FACING, itemPlacementContext.getPlayer().isSneaking() ? itemPlacementContext.getPlayerFacing().getOpposite() : itemPlacementContext.getPlayerFacing());
     }
 
 	@Override
@@ -43,7 +45,7 @@ public class SplitterBlock extends HorizontalFacingBlock implements BlockEntityP
 	}
 
 	@Override
-	public void onBlockRemoved(BlockState state, World world, BlockPos pos, BlockState newState, boolean notify) {
+	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean notify) {
 		if (state.getBlock() != newState.getBlock()) {
 			BlockEntity blockEntity = world.getBlockEntity(pos);
 			if (blockEntity instanceof DoubleMachineBlockEntity) {
@@ -52,7 +54,7 @@ public class SplitterBlock extends HorizontalFacingBlock implements BlockEntityP
 				((DoubleMachineBlockEntity) blockEntity).setRemoved(true);
 			}
 
-			super.onBlockRemoved(state, world, pos, newState, notify);
+			super.onStateReplaced(state, world, pos, newState, notify);
 		}
 
 		updateDiagonals(world, this, pos);
@@ -60,7 +62,7 @@ public class SplitterBlock extends HorizontalFacingBlock implements BlockEntityP
 
 	@Override
 	public void neighborUpdate(BlockState blockState, World world, BlockPos blockPos, Block block, BlockPos blockPos2, boolean boolean_1) {
-		Direction direction = blockState.get(FACING);
+		Direction direction = blockState.get(Properties.FACING);
 		DoubleMachineBlockEntity machineBlockEntity = (DoubleMachineBlockEntity) world.getBlockEntity(blockPos);
 
 		BlockPos leftPos = blockPos.offset(direction.rotateYCounterclockwise());

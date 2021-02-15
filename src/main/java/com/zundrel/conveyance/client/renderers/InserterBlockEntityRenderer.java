@@ -4,13 +4,13 @@ import com.zundrel.conveyance.api.ConveyorRenderer;
 import com.zundrel.conveyance.client.models.ModelInserterArm;
 import com.zundrel.conveyance.common.blocks.conveyors.InserterBlock;
 import com.zundrel.conveyance.common.blocks.entities.InserterBlockEntity;
-import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.util.math.Vector3f;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 
@@ -21,7 +21,7 @@ public class InserterBlockEntityRenderer extends BlockEntityRenderer<InserterBlo
 
     @Override
     public void render(InserterBlockEntity blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-		Direction direction = blockEntity.getCachedState().get(HorizontalFacingBlock.FACING);
+		Direction direction = blockEntity.getCachedState().get(Properties.FACING);
 		String type = ((InserterBlock) blockEntity.getCachedState().getBlock()).getType();
 		int speed = ((InserterBlock) blockEntity.getCachedState().getBlock()).getSpeed();
     	ModelInserterArm modelInserterArm = new ModelInserterArm();

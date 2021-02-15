@@ -7,12 +7,12 @@ import com.zundrel.conveyance.common.inventory.DoubleStackInventory;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
@@ -34,7 +34,7 @@ public class DoubleMachineBlockEntity extends BlockEntity implements Conveyable,
 
 	@Override
     public void tick() {
-		Direction direction = getCachedState().get(HorizontalFacingBlock.FACING);
+		Direction direction = getCachedState().get(Properties.FACING);
 		int speed = 16;
 
 		if (!getLeftStack().isEmpty()) {
@@ -168,12 +168,12 @@ public class DoubleMachineBlockEntity extends BlockEntity implements Conveyable,
 
 	@Override
 	public boolean validInputSide(Direction direction) {
-		return direction == getCachedState().get(HorizontalFacingBlock.FACING).getOpposite();
+		return direction == getCachedState().get(Properties.FACING).getOpposite();
 	}
 
 	@Override
 	public boolean isOutputSide(Direction direction, ConveyorType type) {
-		return getCachedState().get(HorizontalFacingBlock.FACING).rotateYCounterclockwise() == direction || getCachedState().get(HorizontalFacingBlock.FACING).rotateYClockwise() == direction;
+		return getCachedState().get(Properties.FACING).rotateYCounterclockwise() == direction || getCachedState().get(Properties.FACING).rotateYClockwise() == direction;
 	}
 
 	@Override

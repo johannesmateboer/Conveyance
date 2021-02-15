@@ -2,57 +2,43 @@ package com.zundrel.conveyance.common.blocks.decor;
 
 import com.zundrel.conveyance.common.blocks.conveyors.ConveyorProperties;
 import com.zundrel.conveyance.mixin.EntityShapeContextAccess;
-import com.zundrel.wrenchable.WrenchableUtilities;
-import com.zundrel.wrenchable.block.BlockWrenchable;
-import grondag.fermion.modkeys.api.ModKeys;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.EntityShapeContext;
 import net.minecraft.block.ShapeContext;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 
-public class CatwalkBlock extends Block implements BlockWrenchable {
-	public CatwalkBlock(Settings settings) {
-		super(settings);
+@SuppressWarnings("deprecation")
+public class CatwalkBlock extends Block {
+    public CatwalkBlock(Settings settings) {
+        super(settings);
 
-		setDefaultState(this.getDefaultState().with(ConveyorProperties.FLOOR,  true).with(Properties.NORTH, false).with(Properties.EAST, false).with(Properties.SOUTH, false).with(Properties.WEST, false));
-	}
+        setDefaultState(this.getDefaultState()
+                .with(ConveyorProperties.FLOOR, true)
+                .with(Properties.NORTH, false)
+                .with(Properties.EAST, false)
+                .with(Properties.SOUTH, false)
+                .with(Properties.WEST, false)
+        );
+    }
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(ConveyorProperties.FLOOR, Properties.NORTH, Properties.EAST, Properties.SOUTH, Properties.WEST);
     }
 
-    @Override
-    public void onWrenched(World world, PlayerEntity playerEntity, BlockHitResult blockHitResult) {
-        BlockPos pos = blockHitResult.getBlockPos();
-        if (playerEntity.isSneaking()) {
-            world.setBlockState(pos, world.getBlockState(pos).cycle(ConveyorProperties.FLOOR));
-            return;
-        }
-
-        if (blockHitResult.getSide().getAxis().isHorizontal()) {
-            world.setBlockState(pos, world.getBlockState(pos).cycle(getPropertyFromDirection(blockHitResult.getSide())));
-        } else if (blockHitResult.getSide().getAxis().isVertical()) {
-            world.setBlockState(pos, world.getBlockState(pos).cycle(getPropertyFromDirection(playerEntity.getHorizontalFacing().getOpposite())));
-        }
-    }
-    
     public BooleanProperty getPropertyFromDirection(Direction direction) {
-	    switch (direction) {
+        switch (direction) {
             case NORTH:
                 return Properties.NORTH;
             case EAST:
@@ -67,19 +53,18 @@ public class CatwalkBlock extends Block implements BlockWrenchable {
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction facing, BlockState neighborState, IWorld world, BlockPos pos, BlockPos neighborPos) {
-        BlockState newState = state;
-        boolean neighborSameType = neighborState.getBlock() instanceof CatwalkBlock;
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction facing, BlockState newState, WorldAccess world, BlockPos blockPos, BlockPos posFrom) {
+        boolean neighborSameType = newState.getBlock() instanceof CatwalkBlock;
 
-        if (facing==Direction.NORTH)
+        if (facing == Direction.NORTH)
             newState = newState.with(Properties.NORTH, neighborSameType);
-        if (facing==Direction.EAST)
+        if (facing == Direction.EAST)
             newState = newState.with(Properties.EAST, neighborSameType);
-        if (facing==Direction.SOUTH)
+        if (facing == Direction.SOUTH)
             newState = newState.with(Properties.SOUTH, neighborSameType);
-        if (facing==Direction.WEST)
+        if (facing == Direction.WEST)
             newState = newState.with(Properties.WEST, neighborSameType);
-	    
+
         return newState;
     }
 
@@ -93,12 +78,8 @@ public class CatwalkBlock extends Block implements BlockWrenchable {
         VoxelShape fullShape = VoxelShapes.union(VoxelShapes.cuboid(bottom), VoxelShapes.cuboid(north), VoxelShapes.cuboid(east), VoxelShapes.cuboid(south), VoxelShapes.cuboid(west));
 
         if (context instanceof EntityShapeContext) {
-			Item heldItem = ((EntityShapeContextAccess) context).getHeldItem();
-
-			if (WrenchableUtilities.isWrench(heldItem)) {
-				return fullShape;
-			}
-		}
+            Item heldItem = ((EntityShapeContextAccess) context).getHeldItem();
+        }
 
         return getCollisionShape(state, view, pos, context);
     }

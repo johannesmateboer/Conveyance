@@ -25,7 +25,7 @@ public class DownVerticalConveyorBlockEntityRenderer extends BlockEntityRenderer
         boolean conveyor = blockEntity.getCachedState().get(ConveyorProperties.CONVEYOR);
         boolean front = blockEntity.getCachedState().get(ConveyorProperties.FRONT);
 
-		Direction direction = blockEntity.getCachedState().get(Properties.HORIZONTAL_FACING);
+		Direction direction = blockEntity.getCachedState().get(Properties.FACING);
 
         if (conveyor && blockEntity.isEmpty()) {
             matrixStack.push();

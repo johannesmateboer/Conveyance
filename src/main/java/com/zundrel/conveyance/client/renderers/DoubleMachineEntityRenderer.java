@@ -3,12 +3,12 @@ package com.zundrel.conveyance.client.renderers;
 import com.zundrel.conveyance.api.ConveyorRenderer;
 import com.zundrel.conveyance.api.ConveyorType;
 import com.zundrel.conveyance.common.blocks.entities.DoubleMachineBlockEntity;
-import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.Direction;
 
 public class DoubleMachineEntityRenderer extends BlockEntityRenderer<DoubleMachineBlockEntity> implements ConveyorRenderer<DoubleMachineBlockEntity> {
@@ -19,7 +19,7 @@ public class DoubleMachineEntityRenderer extends BlockEntityRenderer<DoubleMachi
     @Override
     public void render(DoubleMachineBlockEntity blockEntity, float partialTicks, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, int i1) {
         int speed = 16;
-        Direction direction = blockEntity.getCachedState().get(HorizontalFacingBlock.FACING);
+        Direction direction = blockEntity.getCachedState().get(Properties.FACING);
 
         if (!blockEntity.getWorld().getBlockState(blockEntity.getPos()).isAir()) {
         	if (!blockEntity.getLeftStack().isEmpty()) {

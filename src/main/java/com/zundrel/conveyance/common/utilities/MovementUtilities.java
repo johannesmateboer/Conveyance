@@ -13,16 +13,21 @@ public class MovementUtilities {
         double motionX = entity.getVelocity().getX();
         double motionZ = entity.getVelocity().getZ();
 
+        // 16 *
         if (speed * facing.getOffsetX() > 0 && motionX < speed) {
-            entity.addVelocity(speed / 2, 0, 0);
+            //entity.addVelocity(speed / 2, 0, 0);
+            entity.setVelocity(speed / 2, 0 ,0);
         } else if (speed * facing.getOffsetX() < 0 && motionX > -speed) {
-            entity.addVelocity(-speed / 2, 0, 0);
+            //entity.addVelocity(-speed / 2, 0, 0);
+            entity.setVelocity(-speed / 2, 0, 0);
         }
 
         if (speed * facing.getOffsetZ() > 0 && motionZ < speed) {
-            entity.addVelocity(0, 0, speed / 2);
+            entity.setVelocity(0, 0 ,speed / 2);
+            //entity.addVelocity(0, 0, speed / 2);
         } else if (speed * facing.getOffsetZ() < 0 && motionZ > -speed) {
-            entity.addVelocity(0, 0, -speed / 2);
+            //entity.addVelocity(0, 0, -speed / 2);
+            entity.setVelocity(0, 0 ,-speed / 2);
         }
 
 		if (shouldCenter) {

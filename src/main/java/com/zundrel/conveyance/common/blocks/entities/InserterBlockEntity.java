@@ -6,7 +6,7 @@ import com.zundrel.conveyance.common.registries.ConveyanceBlockEntities;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalFacingBlock;
+
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SidedInventory;
@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
@@ -43,7 +44,7 @@ public class InserterBlockEntity extends BlockEntity implements SingularStackInv
             return;
         }
 
-        Direction direction = getCachedState().get(HorizontalFacingBlock.FACING);
+        Direction direction = getCachedState().get(Properties.FACING);
         int speed = ((InserterBlock) getCachedState().getBlock()).getSpeed();
 
         if (isEmpty() &&

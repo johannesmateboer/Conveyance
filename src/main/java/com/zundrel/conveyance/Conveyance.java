@@ -37,7 +37,7 @@ public class Conveyance implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-        ConveyanceItems.init();
+        //ConveyanceItems.init();
         ConveyanceBlocks.init();
         ConveyanceBlockEntities.init();
 	}
